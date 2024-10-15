@@ -3,5 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $string = 'hello world';
+    return [
+        'name' => $string,
+        'details' => 'required'
+    ];
 });
