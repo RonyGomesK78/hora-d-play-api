@@ -16,8 +16,13 @@ class SeasonFactory extends Factory
      */
     public function definition(): array
     {
+        $season_years = [
+            "24/25",
+            "23/24",
+        ];
+
         return [
-            "year" => "24/25",
+            "year" => fake()->unique()->randomElement($season_years),
         ];
     }
 }

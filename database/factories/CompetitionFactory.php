@@ -16,8 +16,17 @@ class CompetitionFactory extends Factory
      */
     public function definition(): array
     {
+        $competition_names = [
+            "Campeonato de São Vicente",
+            "Liga Portuguesa",
+            "Premier League",
+            "La Liga",
+            "Serie A",
+            "Champions League"
+        ];
+
         return [
-            "name" => "Campeonato de SV"
+            "name" => fake()->unique()->randomElement($competition_names),
         ];
     }
 }

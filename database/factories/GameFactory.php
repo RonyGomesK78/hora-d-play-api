@@ -18,7 +18,7 @@ class GameFactory extends Factory
     {
         return [
             'location' => fake()->address(),
-            'date' => now(),
+            'date' => fake()->dateTimeBetween('-1 days', '+1 days'),
             'created_at' => now(),
             'updated_at' => now(),
         ];
