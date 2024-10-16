@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Competition;
+use App\Models\Event;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\PlayerGame;

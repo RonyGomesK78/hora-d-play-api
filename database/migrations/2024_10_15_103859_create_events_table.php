@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignUuid('game_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('player_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignUuid('team_id')->nullable()->constrained()->onDelete('cascade');
-
+            
             $table->string('event_type');
             $table->unsignedSmallInteger('minute')->nullable();
             $table->string('description')->nullable();
