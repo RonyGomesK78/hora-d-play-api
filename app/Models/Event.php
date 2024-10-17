@@ -10,4 +10,13 @@ class Event extends Model
 {
     /** @use HasFactory<\Database\Factories\EventFactory> */
     use HasFactory, Uuid;
+
+    protected $fillable = [
+        'game_id',
+        'player_id',
+        'team_id',
+        'event_type',
+        'minute',
+        'description'
+    ];
 }

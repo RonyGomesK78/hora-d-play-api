@@ -10,4 +10,8 @@ class Season extends Model
 {
     /** @use HasFactory<\Database\Factories\SeasonFactory> */
     use HasFactory, Uuid;
+
+    protected $fillable = [
+        'year',
+    ];
 }

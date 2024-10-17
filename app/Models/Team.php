@@ -11,6 +11,11 @@ class Team extends Model
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory, Uuid;
 
+    protected $fillable = [
+        'name',
+        'founded'
+    ];
+
     public function players()
     {
         return $this->hasMany(Player::class);

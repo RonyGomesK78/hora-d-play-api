@@ -10,4 +10,8 @@ class Competition extends Model
 {
     /** @use HasFactory<\Database\Factories\CompetitionFactory> */
     use HasFactory, Uuid;
+
+    protected $fillable = [
+        'name',
+    ];
 }

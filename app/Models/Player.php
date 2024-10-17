@@ -11,4 +11,10 @@ class Player extends Model
 {
     /** @use HasFactory<\Database\Factories\PlayerFactory> */
     use HasFactory, Uuid;
+
+    protected $fillable = [
+        'name',
+        'birthdate',
+        'team_id',
+    ];
 }
