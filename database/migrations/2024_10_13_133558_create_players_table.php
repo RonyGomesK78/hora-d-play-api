@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->foreignUuid('team_id')->constrained();
+            $table->foreignUuid('team_id')->constrained()->onDelete('cascade');;
 
             $table->string('name');
             $table->date('birthdate')->nullable();

@@ -201,11 +201,12 @@ trait DatabaseSeederTrait {
             "year" => "24/25"
         ]);
 
-        Game::factory()->count(10)->create();
-
         // load competitions
         foreach (array_keys($competition_teams) as $competition_name) {
-            $competition = Competition::create(['name' => $competition_name]);
+            $competition = Competition::create([
+                'name' => $competition_name, 
+                'type' => 'league'
+            ]);
 
             // load teams and assigned them to competitions by season
             foreach ($competition_teams[$competition_name] as $team_name) {
@@ -252,6 +253,11 @@ trait DatabaseSeederTrait {
     protected function seed_competitons_teams_and_results() {
         $this->seed_competitions_and_teams();
 
+        $portuguese_league_id = Competition::where('name', 'Liga Portuguesa')->first()->id;
+        $premier_league_id = Competition::where('name', 'Premier League')->first()->id;
+
+        $season_id = Season::where('year', '24/25')->first()->id;
+
         // get premier league teams
         $man_utd = Team::where('name', 'Manchester United')->first();
         $man_city = Team::where('name', 'Manchester City')->first();
@@ -269,39 +275,54 @@ trait DatabaseSeederTrait {
 
         $yesterday_pl_game_1 = Game::factory()->create([
             'date' => $yesterday_date,
-            'location' => 'Eithad Stadium'
+            'location' => 'Eithad Stadium',
+            'season_id' => $season_id,
+            'competition_id' => $premier_league_id,
         ]);
         $yesterday_lpt_game_1 = Game::factory()->create([
             'date' => $yesterday_date,
-            'location' => 'Estádio Do Dragão'
+            'location' => 'Estádio Do Dragão',
+            'season_id' => $season_id,
+            'competition_id' => $portuguese_league_id
         ]);
 
         $today_pl_game_1 = Game::factory()->create([
             'date' => $today_date,
-            'location' => 'Old Trafford'
+            'location' => 'Old Trafford',
+            'season_id' => $season_id,
+            'competition_id' => $premier_league_id,
         ]);
         $today_lpt_game_1 = Game::factory()->create([
             'date' => $today_date,
-            'location' => 'Estádio Municipal de Braga'
+            'location' => 'Estádio Municipal de Braga',
+            'season_id' => $season_id,
+            'competition_id' => $portuguese_league_id
         ]);
         $today_lpt_game_2 = Game::factory()->create([
             'date' => $today_date,
-            'location' => 'Estádio da Luz'
+            'location' => 'Estádio da Luz',
+            'season_id' => $season_id,
+            'competition_id' => $portuguese_league_id
         ]);
 
         $tomorrow_pl_game_1 = Game::factory()->create([
             'date' => $tomorrow_date,
-            'location' => 'Anfield'
+            'location' => 'Anfield',
+            'season_id' => $season_id,
+            'competition_id' => $premier_league_id,
         ]);
         $tomorrow_lpt_game_1 = Game::factory()->create([
             'date' => $tomorrow_date,
-            'location' => 'Estádio Municipal de Braga'
+            'location' => 'Estádio Municipal de Braga',
+            'season_id' => $season_id,
+            'competition_id' => $portuguese_league_id
         ]);
 
         
         // add players to today_pl_game_1 --> Man Utd vs Man City
         $this->seed_players_to_game($man_utd->players, $today_pl_game_1);
         $this->seed_players_to_game($man_city->players, $today_pl_game_1);
+
         // events of today_pl_game_1 --> Man Utd vs Man City
         Event::create([
             'game_id' => $today_pl_game_1->id,
@@ -376,47 +397,76 @@ trait DatabaseSeederTrait {
             'event_type' => 'interval',
             'minute' => 48,
         ]);
-        // Event::create([
-        //     'game_id' => $today_pl_game_1->id,
-        //     'event_type' => 'goal',
-        //     'player_id' => $man_city->players->where('name', 'Rúben Dias')->first()->id,
-        //     'team_id' => $man_city->id,
-        //     'minute' => 50,
-        // ]);
-        // Event::create([
-        //     'game_id' => $today_pl_game_1->id,
-        //     'event_type' => 'assist',
-        //     'player_id' => $man_city->players->where('name', 'Kevin De Bruyne')->first()->id,
-        //     'team_id' => $man_city->id,
-        //     'minute' => 50,
-        // ]);
-        // Event::create([
-        //     'game_id' => $today_pl_game_1->id,
-        //     'event_type' => 'goal',
-        //     'player_id' => $man_city->players->where('name', 'Erling Haaland')->first()->id,
-        //     'team_id' => $man_city->id,
-        //     'minute' => 89,
-        // ]);
-        // Event::create([
-        //     'game_id' => $today_pl_game_1->id,
-        //     'event_type' => 'foul',
-        //     'player_id' => $man_utd->players->where('name', 'Raphaël Varane')->first()->id,
-        //     'team_id' => $man_utd->id,
-        //     'minute' => 90,
-        // ]);
-        // Event::create([
-        //     'game_id' => $today_pl_game_1->id,
-        //     'event_type' => 'red card',
-        //     'player_id' => $man_utd->players->where('name', 'Raphaël Varane')->first()->id,
-        //     'team_id' => $man_utd->id,
-        //     'minute' => 90,
-        // ]);
-        // Event::create([
-        //     'game_id' => $today_pl_game_1->id,
-        //     'event_type' => 'end',
-        //     'minute' => 94,
-        // ]);
-        Result::factory()->create([
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'goal',
+            'player_id' => $man_city->players->where('name', 'Rúben Dias')->first()->id,
+            'team_id' => $man_city->id,
+            'minute' => 50,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'assist',
+            'player_id' => $man_city->players->where('name', 'Kevin De Bruyne')->first()->id,
+            'team_id' => $man_city->id,
+            'minute' => 50,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'subbing off',
+            'player_id' => $man_utd->players->where('name', 'Casemiro')->first()->id,
+            'team_id' => $man_utd->id,
+            'minute' => 60,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'subbing in',
+            'player_id' => $man_utd->players->where('name', 'Antony')->first()->id,
+            'team_id' => $man_utd->id,
+            'minute' => 60,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'subbing off',
+            'player_id' => $man_city->players->where('name', 'Kevin De Bruyne')->first()->id,
+            'team_id' => $man_city->id,
+            'minute' => 68,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'subbing in',
+            'player_id' => $man_city->players->where('name', 'Phil Foden')->first()->id,
+            'team_id' => $man_city->id,
+            'minute' => 68,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'goal',
+            'player_id' => $man_city->players->where('name', 'Erling Haaland')->first()->id,
+            'team_id' => $man_city->id,
+            'minute' => 89,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'foul',
+            'player_id' => $man_utd->players->where('name', 'Raphaël Varane')->first()->id,
+            'team_id' => $man_utd->id,
+            'minute' => 90,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'red card',
+            'player_id' => $man_utd->players->where('name', 'Raphaël Varane')->first()->id,
+            'team_id' => $man_utd->id,
+            'minute' => 90,
+        ]);
+        Event::create([
+            'game_id' => $today_pl_game_1->id,
+            'event_type' => 'end',
+            'minute' => 94,
+        ]);
+
+        Result::create([
             'game_id' => $yesterday_pl_game_1->id,
             'home_team_id' => $man_city->id,
             'away_team_id' => $liverpool->id,
@@ -424,7 +474,7 @@ trait DatabaseSeederTrait {
             'away_score' => 2,
         ]);
 
-        Result::factory()->create([
+        Result::create([
             'game_id' => $yesterday_lpt_game_1->id,
             'home_team_id' => $porto->id,
             'away_team_id' => $sporting->id,
@@ -432,7 +482,7 @@ trait DatabaseSeederTrait {
             'away_score' => 2,
         ]);
 
-        Result::factory()->create([
+        Result::create([
             'game_id' => $today_pl_game_1->id,
             'home_team_id' => $man_utd->id,
             'away_team_id' => $man_city->id,
@@ -440,7 +490,7 @@ trait DatabaseSeederTrait {
             'away_score' => 4,
         ]);
 
-        Result::factory()->create([
+        Result::create([
             'game_id' => $today_lpt_game_1->id,
             'home_team_id' => $braga->id,
             'away_team_id' => $sporting->id,
@@ -448,7 +498,7 @@ trait DatabaseSeederTrait {
             'away_score' => 5,
         ]);
 
-        Result::factory()->create([
+        Result::create([
             'game_id' => $today_lpt_game_2->id,
             'home_team_id' => $benfica->id,
             'away_team_id' => $porto->id,
@@ -456,13 +506,13 @@ trait DatabaseSeederTrait {
             'away_score' => 4,
         ]);
 
-        Result::factory()->create([
+        Result::create([
             'game_id' => $tomorrow_pl_game_1->id,
             'home_team_id' => $liverpool->id,
             'away_team_id' => $man_utd->id,
         ]);
 
-        Result::factory()->create([
+        Result::create([
             'game_id' => $tomorrow_lpt_game_1->id,
             'home_team_id' => $braga->id,
             'away_team_id' => $benfica->id,

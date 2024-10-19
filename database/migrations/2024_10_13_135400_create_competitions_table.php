@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('seasons', function (Blueprint $table) {
+        Schema::create('competitions', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->string('year');
+            $table->string('name')->unique();
+            $table->string('type');
+
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('seasons');
+        Schema::dropIfExists('competitions');
     }
 };

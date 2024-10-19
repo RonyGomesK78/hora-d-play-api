@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('results', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->foreignUuid('game_id')->constrained();
-            $table->foreignUuid('home_team_id')->constrained('teams');
-            $table->foreignUuid('away_team_id')->constrained('teams');
+            $table->foreignUuid('game_id')->constrained()->onDelete('cascade');;
+            $table->foreignUuid('home_team_id')->constrained('teams')->onDelete('cascade');;
+            $table->foreignUuid('away_team_id')->constrained('teams')->onDelete('cascade');;
             
             $table->unsignedTinyInteger('home_score')->nullable();
             $table->unsignedTinyInteger('away_score')->nullable();
