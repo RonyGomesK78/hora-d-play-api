@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Interfaces\GameRepositoryInterface;
+
 use App\Models\Event;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 
 class GameRepository implements GameRepositoryInterface

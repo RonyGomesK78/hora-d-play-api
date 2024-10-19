@@ -322,6 +322,7 @@ trait DatabaseSeederTrait {
         // add players to today_pl_game_1 --> Man Utd vs Man City
         $this->seed_players_to_game($man_utd->players, $today_pl_game_1);
         $this->seed_players_to_game($man_city->players, $today_pl_game_1);
+
         // events of today_pl_game_1 --> Man Utd vs Man City
         Event::create([
             'game_id' => $today_pl_game_1->id,
