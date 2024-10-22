@@ -6,3 +6,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/games', [GameController::class, 'index']);
 
 Route::get('/games/{game_id}/events', [GameController::class, 'show_events']);
+
+Route::post('/games/{game_id}/events', [GameController::class, 'create_event']);

@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Interfaces\GameRepositoryInterface;
-
 use App\Models\Event;
 
 use Illuminate\Support\Facades\DB;
@@ -27,7 +26,23 @@ class GameRepository implements GameRepositoryInterface
                         'away_team_id', at.id,
                         'away_team_name', at.name,
                         'home_score', r.home_score,
-                        'away_score', r.away_score
+                        'away_score', r.away_score,
+                        'started', EXISTS(
+                            SELECT 1 FROM 
+                            events e 
+                            WHERE e.game_id = g.id AND e.event_type = 'initial_whistle'
+                        ),
+                        'ongoing', EXISTS(
+                            SELECT 1 FROM events e
+                            WHERE e.game_id = g.id AND e.event_type = 'initial_whistle'
+                        ) AND NOT EXISTS (
+                            SELECT 1 FROM events e
+                            WHERE e.game_id = g.id AND e.event_type = 'final_whistle'
+                        ),
+                        'finished', EXISTS(
+                            SELECT 1 FROM events e 
+                            WHERE e.game_id = g.id AND e.event_type = 'final_whistle'
+                        )
                     )
                     ORDER BY g.date
                 ) AS games
@@ -64,5 +79,17 @@ class GameRepository implements GameRepositoryInterface
                 'team_name' => $event->team ? $event->team->name : null,
             ];
         });
+    }
+
+    public function create_event($event, $game_id) {
+        $game_event = Event::create([
+            'game_id' => $game_id,
+            'team_id' => $event->team_id,
+            'player_id' => $event->player_id,
+            'event_type' => $event->event_type,
+            'minute' => $event->minute,
+        ]);
+
+        return $game_event;
     }
 }

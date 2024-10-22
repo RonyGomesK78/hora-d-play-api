@@ -57,6 +57,9 @@ class GameTest extends TestCase {
                         'away_team_name' => 'Sporting',
                         'home_score' => 2,
                         'away_score' => 5,
+                        'started' => false,
+                        'ongoing' => false,
+                        'finished' => false,
                     ],
                     [
                         'id' => $today_lpt_game_2_id,
@@ -68,6 +71,9 @@ class GameTest extends TestCase {
                         'away_team_name' => 'Porto',
                         'home_score' => 4,
                         'away_score' => 4,
+                        'started' => false,
+                        'ongoing' => false,
+                        'finished' => false,
                     ]
                 ]
             ],
@@ -85,6 +91,9 @@ class GameTest extends TestCase {
                         'away_team_name' => 'Manchester City',
                         'home_score' => 1,
                         'away_score' => 4,
+                        'started' => true,
+                        'ongoing' => false,
+                        'finished' => true,
                     ]
                 ]
             ],
@@ -132,6 +141,9 @@ class GameTest extends TestCase {
                         'away_team_name' => 'Sporting',
                         'home_score' => 0,
                         'away_score' => 2,
+                        'started' => false,
+                        'ongoing' => false,
+                        'finished' => false,
                     ],
                 ]
             ],
@@ -149,6 +161,9 @@ class GameTest extends TestCase {
                         'away_team_name' => 'Liverpool',
                         'home_score' => 2,
                         'away_score' => 2,
+                        'started' => false,
+                        'ongoing' => false,
+                        'finished' => false,
                     ]
                 ]
             ],
@@ -194,6 +209,9 @@ class GameTest extends TestCase {
                         'away_team_name' => 'Benfica',
                         'home_score' => null,
                         'away_score' => null,
+                        'started' => false,
+                        'ongoing' => false,
+                        'finished' => false,
                     ],
                 ]
             ],
@@ -211,6 +229,9 @@ class GameTest extends TestCase {
                         'away_team_name' => 'Manchester United',
                         'home_score' => null,
                         'away_score' => null,
+                        'started' => false,
+                        'ongoing' => false,
+                        'finished' => false,
                     ]
                 ]
             ],
@@ -245,7 +266,7 @@ class GameTest extends TestCase {
 
         $expected_response = [
             [
-                'event_type' => "start",
+                'event_type' => "initial_whistle",
                 'minute' => 0,
                 'player_id' => null,
                 'player_name' => null,
@@ -405,7 +426,7 @@ class GameTest extends TestCase {
                 'team_name' => "Manchester United",
             ],
             [
-                'event_type' => "end",
+                'event_type' => "final_whistle",
                 'minute' => 94,
                 'player_id' => null,
                 'player_name' => null,
