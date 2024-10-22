@@ -326,7 +326,7 @@ trait DatabaseSeederTrait {
         // events of today_pl_game_1 --> Man Utd vs Man City
         Event::create([
             'game_id' => $today_pl_game_1->id,
-            'event_type' => 'start',
+            'event_type' => 'initial_whistle',
             'minute' => 0,
         ]);
         Event::create([
@@ -462,7 +462,7 @@ trait DatabaseSeederTrait {
         ]);
         Event::create([
             'game_id' => $today_pl_game_1->id,
-            'event_type' => 'end',
+            'event_type' => 'final_whistle',
             'minute' => 94,
         ]);
 

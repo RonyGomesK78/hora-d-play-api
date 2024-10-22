@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\GameRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -13,7 +14,7 @@ class GameController extends Controller
         $this->game_repository_interface = $game_repository_interface;
     }
 
-    public function index(Request $request) {
+    public function index(Request $request): JsonResponse {
         $date = $request->query('date', now()->toDateString());
 
         $games = $this->game_repository_interface->index($date);
@@ -24,11 +25,5 @@ class GameController extends Controller
         }, $games);
 
         return response()->json($formattedGames);
-    }
-
-    public function show_events($game_id) {
-        $events = $this->game_repository_interface->get_events($game_id);
-
-        return response()->json($events);
     }
 }

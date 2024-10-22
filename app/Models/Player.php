@@ -17,4 +17,8 @@ class Player extends Model
         'birthdate',
         'team_id',
     ];
+
+    public function games() {
+        return $this->belongsToMany(Game::class, 'player_games', 'player_id', 'game_id');
+    }
 }
