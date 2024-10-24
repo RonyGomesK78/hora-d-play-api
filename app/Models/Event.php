@@ -19,4 +19,12 @@ class Event extends Model
         'minute',
         'description'
     ];
+
+    public function team() {
+        return $this->belongsTo(Team::class);
+    }
+    
+    public function player() {
+        return $this->belongsTo(Player::class);
+    }
 }
