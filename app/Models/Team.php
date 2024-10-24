@@ -16,8 +16,7 @@ class Team extends Model
         'founded'
     ];
 
-    public function players()
-    {
+    public function players() {
         return $this->hasMany(Player::class);
     }
 }
