@@ -17,4 +17,12 @@ class PlayerGame extends Model
 
     public $incrementing = false;  // No auto-incrementing ID
     protected $primaryKey = ['game_id', 'player_id'];  // Composite primary key
+
+    public function team() {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function player() {
+        return $this->belongsTo(Player::class);
+    }
 }

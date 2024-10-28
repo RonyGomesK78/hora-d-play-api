@@ -2,14 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\GameRepositoryInterface;
-use App\Models\Event;
-use Illuminate\Http\Request;
+use App\Enums\EventType;
 use Illuminate\Support\Facades\DB;
+
+use App\Interfaces\GameRepositoryInterface;
 
 class GameRepository implements GameRepositoryInterface
 {
-   
     public function index(string $date) {
         
         $games = DB::select("
@@ -26,7 +25,23 @@ class GameRepository implements GameRepositoryInterface
                         'away_team_id', at.id,
                         'away_team_name', at.name,
                         'home_score', r.home_score,
-                        'away_score', r.away_score
+                        'away_score', r.away_score,
+                        'started', EXISTS(
+                            SELECT 1 FROM 
+                            events e 
+                            WHERE e.game_id = g.id AND e.event_type = '" . EventType::INITIAL_WHISTLE->value . "'
+                        ),
+                        'ongoing', EXISTS(
+                            SELECT 1 FROM events e
+                            WHERE e.game_id = g.id AND e.event_type = '" . EventType::INITIAL_WHISTLE->value . "'
+                        ) AND NOT EXISTS (
+                            SELECT 1 FROM events e
+                            WHERE e.game_id = g.id AND e.event_type = '" . EventType::FINAL_WHISTLE->value . "'
+                        ),
+                        'finished', EXISTS(
+                            SELECT 1 FROM events e 
+                            WHERE e.game_id = g.id AND e.event_type = '" . EventType::FINAL_WHISTLE->value . "'
+                        )
                     )
                     ORDER BY g.date
                 ) AS games
@@ -46,22 +61,5 @@ class GameRepository implements GameRepositoryInterface
         ", [$date]);
 
         return $games;
-    }
-
-    public function get_events($game_id) {
-        $events = Event::with(['team', 'player'])
-            ->where('game_id', $game_id)
-            ->get(['event_type', 'minute', 'team_id', 'player_id']);
-
-        return $events->map(function ($event) {
-            return [
-                'event_type' => $event->event_type,
-                'minute' => $event->minute,
-                'player_id' => $event->player ? $event->player->id : null,
-                'player_name' => $event->player ? $event->player->name : null,
-                'team_id' => $event->team ? $event->team->id : null,
-                'team_name' => $event->team ? $event->team->name : null,
-            ];
-        });
     }
 }

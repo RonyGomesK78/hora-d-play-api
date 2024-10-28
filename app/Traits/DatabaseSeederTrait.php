@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Enums\EventType;
 use App\Models\Competition;
 use App\Models\Event;
 use App\Models\Game;
@@ -326,7 +327,7 @@ trait DatabaseSeederTrait {
         // events of today_pl_game_1 --> Man Utd vs Man City
         Event::create([
             'game_id' => $today_pl_game_1->id,
-            'event_type' => 'start',
+            'event_type' => EventType::INITIAL_WHISTLE->value,
             'minute' => 0,
         ]);
         Event::create([
@@ -394,7 +395,7 @@ trait DatabaseSeederTrait {
         ]);
         Event::create([
             'game_id' => $today_pl_game_1->id,
-            'event_type' => 'interval',
+            'event_type' => EventType::HALF_TIME->value,
             'minute' => 48,
         ]);
         Event::create([
@@ -462,7 +463,7 @@ trait DatabaseSeederTrait {
         ]);
         Event::create([
             'game_id' => $today_pl_game_1->id,
-            'event_type' => 'end',
+            'event_type' => EventType::FINAL_WHISTLE->value,
             'minute' => 94,
         ]);
 
