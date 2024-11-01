@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('game-live', function () {
+Broadcast::channel('games-live', function () {
     return true;
+});
+
+Broadcast::channel('game-live.{gameId}', function ($gameId) {
+    return true; 
 });

@@ -26,4 +26,14 @@ class GameController extends Controller
 
         return response()->json($formattedGames);
     }
+
+    public function get_one(string $game_id): JsonResponse {
+        $game = $this->game_repository_interface->get_one($game_id);
+
+        if (is_null($game)) {
+            return response()->json(['message' => "Game's id not found"], 404);
+        }
+
+        return response()->json($game);
+    }
 }
