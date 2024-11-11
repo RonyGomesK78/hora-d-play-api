@@ -33,7 +33,8 @@ class GameUpdated implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('game-live'),
+            new Channel('games-live'),
+            new Channel('game-live.' . $this->game_event->game_id),
         ];
     }
 
@@ -47,14 +48,5 @@ class GameUpdated implements ShouldBroadcastNow
         return [
             'game_event' => $this->game_event,
         ];
-    }
-
-    /**
-     * Determine if the event should be broadcast.
-     */
-    public function broadcastWhen(): bool
-    {
-        // Broadcast only when the event type is 'goal'
-        return $this->game_event->event_type === 'goal';
     }
 }

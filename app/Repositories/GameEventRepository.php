@@ -11,6 +11,8 @@ class GameEventRepository implements GameEventRepositoryInterface
     public function index($game_id) {
         $events = Event::with(['team', 'player'])
             ->where('game_id', $game_id)
+            ->orderBy('minute')
+            ->orderBy('created_at')
             ->get(['event_type', 'minute', 'team_id', 'player_id']);
 
         return $events->map(function ($event) {

@@ -30,29 +30,29 @@ class EventTest extends TestCase
 
     #[Test]
     public function it_should_successful_create_a_game_event_without_player_id_and_team_id(): void {
-        $league_id = Competition::where('name', 'Serie A')->first()->id;
+        $league_id = Competition::where('name', 'Campeonato de São Vicente - 1ª Divisão')->first()->id;
         $season_id = Season::where('year', '24/25')->first()->id;
 
-        $napoli = Team::where('name', 'Napoli')->first();
-        $roma = Team::where('name', 'AS Roma')->first();
+        $mindelense = Team::where('name', 'Mindelense')->first();
+        $derby = Team::where('name', 'Derby')->first();
 
         $today_date = Carbon::today()->setTime(15, 0, 0);
 
         $game = Game::create([
             'date' => $today_date,
-            'location' => 'Stadio Olimpico di Roma',
+            'location' => 'Adérito Sena',
             'season_id' => $season_id,
             'competition_id' => $league_id,
         ]);
 
         Result::create([
             'game_id' => $game->id,
-            'home_team_id' => $roma->id,
-            'away_team_id' => $napoli->id,
+            'home_team_id' => $derby->id,
+            'away_team_id' => $mindelense->id,
         ]);
 
-        $this->seed_players_to_game($napoli->players, $game);
-        $this->seed_players_to_game($roma->players, $game);
+        $this->seed_players_to_game($mindelense->players, $game);
+        $this->seed_players_to_game($derby->players, $game);
 
         $response = $this->postJson(
             "/api/games/$game->id/events",
@@ -71,39 +71,39 @@ class EventTest extends TestCase
 
     #[Test]
     public function it_should_successful_create_a_game_event_with_player_id_and_team_id(): void {
-        $league_id = Competition::where('name', 'Serie A')->first()->id;
+        $league_id = Competition::where('name', 'Campeonato de São Vicente - 1ª Divisão')->first()->id;
         $season_id = Season::where('year', '24/25')->first()->id;
 
-        $napoli = Team::where('name', 'Napoli')->first();
-        $roma = Team::where('name', 'AS Roma')->first();
+        $mindelense = Team::where('name', 'Mindelense')->first();
+        $derby = Team::where('name', 'Derby')->first();
 
         $today_date = Carbon::today()->setTime(18, 0, 0);
 
         $game = Game::create([
             'date' => $today_date,
-            'location' => 'Stadio Olimpico di Roma',
+            'location' => 'Adérito Sena',
             'season_id' => $season_id,
             'competition_id' => $league_id,
         ]);
 
         Result::create([
             'game_id' => $game->id,
-            'home_team_id' => $roma->id,
-            'away_team_id' => $napoli->id,
+            'home_team_id' => $derby->id,
+            'away_team_id' => $mindelense->id,
         ]);
 
-        $this->seed_players_to_game($napoli->players, $game);
-        $this->seed_players_to_game($roma->players, $game);
+        $this->seed_players_to_game($mindelense->players, $game);
+        $this->seed_players_to_game($derby->players, $game);
 
-        $dybala = $game->players->firstWhere('name', 'Paulo Dybala');
+        $nuno_rocha = $game->players->firstWhere('name', 'Nuno Rocha');
 
         $response = $this->postJson(
             "/api/games/$game->id/events",
             [
                 'event_type' => 'goal',
                 'minute' => 10,
-                'team_id' => $roma->id,
-                'player_id' => $dybala->id
+                'team_id' => $derby->id,
+                'player_id' => $nuno_rocha->id
             ]
         );
 
@@ -137,31 +137,31 @@ class EventTest extends TestCase
 
     #[Test]
     public function it_should_return_status_code_422_when_the_event_type_is_null(): void {
-        $league_id = Competition::where('name', 'Serie A')->first()->id;
+        $league_id = Competition::where('name', 'Campeonato de São Vicente - 1ª Divisão')->first()->id;
         $season_id = Season::where('year', '24/25')->first()->id;
 
-        $napoli = Team::where('name', 'Napoli')->first();
-        $roma = Team::where('name', 'AS Roma')->first();
+        $mindelense = Team::where('name', 'Mindelense')->first();
+        $derby = Team::where('name', 'Derby')->first();
 
         $today_date = Carbon::today()->setTime(15, 0, 0);
 
         $game = Game::create([
             'date' => $today_date,
-            'location' => 'Stadio Olimpico di Roma',
+            'location' => 'Adérito Sena',
             'season_id' => $season_id,
             'competition_id' => $league_id,
         ]);
 
         Result::create([
             'game_id' => $game->id,
-            'home_team_id' => $roma->id,
-            'away_team_id' => $napoli->id,
+            'home_team_id' => $derby->id,
+            'away_team_id' => $mindelense->id,
         ]);
 
-        $this->seed_players_to_game($napoli->players, $game);
-        $this->seed_players_to_game($roma->players, $game);
+        $this->seed_players_to_game($mindelense->players, $game);
+        $this->seed_players_to_game($derby->players, $game);
 
-        $dybala = $game->players->firstWhere('name', 'Paulo Dybala');
+        $nuno_rocha = $game->players->firstWhere('name', 'Nuno Rocha');
 
         $expected_response = [
             "message" => "The event type field is required."
@@ -172,8 +172,8 @@ class EventTest extends TestCase
             [
                 'event_type' => null,
                 'minute' => 10,
-                'team_id' => $roma->id,
-                'player_id' => $dybala->id
+                'team_id' => $derby->id,
+                'player_id' => $nuno_rocha->id
             ]
         );
 
@@ -184,29 +184,29 @@ class EventTest extends TestCase
 
     #[Test]
     public function it_should_return_status_code_422_when_the_team_id_is_present_but_the_player_id_not(): void {
-        $league_id = Competition::where('name', 'Serie A')->first()->id;
+        $league_id = Competition::where('name', 'Campeonato de São Vicente - 1ª Divisão')->first()->id;
         $season_id = Season::where('year', '24/25')->first()->id;
 
-        $napoli = Team::where('name', 'Napoli')->first();
-        $roma = Team::where('name', 'AS Roma')->first();
+        $mindelense = Team::where('name', 'Mindelense')->first();
+        $derby = Team::where('name', 'Derby')->first();
 
         $today_date = Carbon::today()->setTime(15, 0, 0);
 
         $game = Game::create([
             'date' => $today_date,
-            'location' => 'Stadio Olimpico di Roma',
+            'location' => 'Adérito Sena',
             'season_id' => $season_id,
             'competition_id' => $league_id,
         ]);
 
         Result::create([
             'game_id' => $game->id,
-            'home_team_id' => $roma->id,
-            'away_team_id' => $napoli->id,
+            'home_team_id' => $derby->id,
+            'away_team_id' => $mindelense->id,
         ]);
 
-        $this->seed_players_to_game($napoli->players, $game);
-        $this->seed_players_to_game($roma->players, $game);
+        $this->seed_players_to_game($mindelense->players, $game);
+        $this->seed_players_to_game($derby->players, $game);
 
         $expected_response = [
             "message" => "The team_id must be null when player_id is null."
@@ -217,7 +217,7 @@ class EventTest extends TestCase
             [
                 'event_type' => 'red card',
                 'minute' => 10,
-                'team_id' => $roma->id,
+                'team_id' => $derby->id,
                 'player_id' => null
             ]
         );
@@ -229,31 +229,31 @@ class EventTest extends TestCase
 
     #[Test]
     public function it_should_return_status_code_422_when_the_player_id_is_present_but_the_team_id_not(): void {
-        $league_id = Competition::where('name', 'Serie A')->first()->id;
+        $league_id = Competition::where('name', 'Campeonato de São Vicente - 1ª Divisão')->first()->id;
         $season_id = Season::where('year', '24/25')->first()->id;
 
-        $napoli = Team::where('name', 'Napoli')->first();
-        $roma = Team::where('name', 'AS Roma')->first();
+        $mindelense = Team::where('name', 'Mindelense')->first();
+        $derby = Team::where('name', 'Derby')->first();
 
         $today_date = Carbon::today()->setTime(15, 0, 0);
 
         $game = Game::create([
             'date' => $today_date,
-            'location' => 'Stadio Olimpico di Roma',
+            'location' => 'Adérito Sena',
             'season_id' => $season_id,
             'competition_id' => $league_id,
         ]);
 
         Result::create([
             'game_id' => $game->id,
-            'home_team_id' => $roma->id,
-            'away_team_id' => $napoli->id,
+            'home_team_id' => $derby->id,
+            'away_team_id' => $mindelense->id,
         ]);
 
-        $this->seed_players_to_game($napoli->players, $game);
-        $this->seed_players_to_game($roma->players, $game);
+        $this->seed_players_to_game($mindelense->players, $game);
+        $this->seed_players_to_game($derby->players, $game);
 
-        $dybala = $game->players->firstWhere('name', 'Paulo Dybala');
+        $nuno_rocha = $game->players->firstWhere('name', 'Nuno Rocha');
 
         $expected_response = [
             "message" => "The player_id must be null when team_id is null."
@@ -265,7 +265,7 @@ class EventTest extends TestCase
                 'event_type' => 'assist',
                 'minute' => 10,
                 'team_id' => null,
-                'player_id' => $dybala->id
+                'player_id' => $nuno_rocha->id
             ]
         );
 
@@ -276,31 +276,31 @@ class EventTest extends TestCase
 
     #[Test]
     public function it_should_return_status_code_422_when_the_player_not_belongs_to_the_team(): void {
-        $league_id = Competition::where('name', 'Serie A')->first()->id;
+        $league_id = Competition::where('name', 'Campeonato de São Vicente - 1ª Divisão')->first()->id;
         $season_id = Season::where('year', '24/25')->first()->id;
 
-        $napoli = Team::where('name', 'Napoli')->first();
-        $roma = Team::where('name', 'AS Roma')->first();
+        $mindelense = Team::where('name', 'Mindelense')->first();
+        $derby = Team::where('name', 'Derby')->first();
 
         $today_date = Carbon::today()->setTime(15, 0, 0);
 
         $game = Game::create([
             'date' => $today_date,
-            'location' => 'Stadio Olimpico di Roma',
+            'location' => 'Adérito Sena',
             'season_id' => $season_id,
             'competition_id' => $league_id,
         ]);
 
         Result::create([
             'game_id' => $game->id,
-            'home_team_id' => $roma->id,
-            'away_team_id' => $napoli->id,
+            'home_team_id' => $derby->id,
+            'away_team_id' => $mindelense->id,
         ]);
 
-        $this->seed_players_to_game($napoli->players, $game);
-        $this->seed_players_to_game($roma->players, $game);
+        $this->seed_players_to_game($mindelense->players, $game);
+        $this->seed_players_to_game($derby->players, $game);
 
-        $dybala = $game->players->firstWhere('name', 'Paulo Dybala');
+        $nuno_rocha = $game->players->firstWhere('name', 'Nuno Rocha');
 
         $expected_response = [
             "message" => "The selected player does not belong to the specified team."
@@ -311,8 +311,8 @@ class EventTest extends TestCase
             [
                 'event_type' => 'yellow card',
                 'minute' => 10,
-                'team_id' => $napoli->id,
-                'player_id' => $dybala->id
+                'team_id' => $mindelense->id,
+                'player_id' => $nuno_rocha->id
             ]
         );
 
